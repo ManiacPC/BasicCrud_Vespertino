@@ -22,13 +22,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE contacto;");
-        db.execSQL("CREATE TABLE contacto(codcontacto INTEGER PRIMARY KEY, nombre TEXT, fono INTEGER, email TEXT);");
-        db.execSQL("INSERT INTO contacto VALUES(1, 'Tulio', 1122, 'tulio@31minutos.cl');");
-        db.execSQL("INSERT INTO contacto VALUES(2, 'Juan', 2233, 'juan@31minutos.cl');");
-        db.execSQL("INSERT INTO contacto VALUES(3, 'Anacleto', 3344, 'anacleto@31minutos.cl');");
+        if(newVersion == 2) {
+            db.execSQL("DROP TABLE contacto;");
+            db.execSQL("CREATE TABLE contacto(codcontacto INTEGER PRIMARY KEY, nombre TEXT, fono INTEGER, email TEXT);");
+            db.execSQL("INSERT INTO contacto VALUES(1, 'Tulio', 1122, 'tulio@31minutos.cl');");
+            db.execSQL("INSERT INTO contacto VALUES(2, 'Juan', 2233, 'juan@31minutos.cl');");
+            db.execSQL("INSERT INTO contacto VALUES(3, 'Anacleto', 3344, 'anacleto@31minutos.cl');");
+        }
     }
-
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE contacto;");
