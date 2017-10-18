@@ -2,7 +2,10 @@ package cl.inacap.databaseinsert.models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
 
 import cl.inacap.databaseinsert.helpers.DatabaseHelper;
 
@@ -27,9 +30,50 @@ public class Contacto {
         this.email = email;
     }
 
-    private boolean actualizar(int codContacto, Contacto contactoActualizar)
+    // CRUD
+    // CREATE (INSERTAR) READ (SELECCIONAR - OBTENER) UPDATE (ACTUALIZAR) DELETE (BORRAR)
+    public ArrayList<Contacto> obtenerContactos() {
+        ArrayList<Contacto> contactos = new ArrayList<>();
+        SQLiteDatabase db = this.helper.getReadableDatabase();
+
+        // Cursor consulta = db.rawQuery("SELECT * FROM contacto WHERE codcontacto = ?", new String[] { String.valueOf(1)});
+        Cursor consulta = db.rawQuery("SELECT * FROM contacto", null);
+        if(consulta.moveToFirst()) {
+            do {
+                // Fila = Columnas(codContacto[0], Nombre[1], Fono[2], Email[3])
+                int codContacto = consulta.getInt(0);
+                String nombre = consulta.getString(1);
+                int fono = consulta.getInt(2);
+                String email = consulta.getString(3);
+
+                Contacto contacto = new Contacto(codContacto, nombre, fono, email);
+                contactos.add(contacto);
+            } while (consulta.moveToNext());
+            return contactos;
+        } else {
+            return null;
+        }
+    }
+
+    public boolean actualizar(Contacto contactoActualizar)
     {
-        return false; // Retorno temporal
+        SQLiteDatabase db = this.helper.getWritableDatabase();
+        ContentValues c = new ContentValues();
+        //     PARAMETRO    VALOR
+        c.put("NOMBRE", contactoActualizar.getNombre());
+        c.put("FONO", contactoActualizar.getFono());
+        c.put("EMAIL", contactoActualizar.getEmail());
+        int filasModificadas;
+
+        try {
+            filasModificadas = db.update("contacto",c,"codcontacto = ?", new String[] { String.valueOf(contactoActualizar.getCodContacto()) });
+            // if(filasModificadas > 0) return true; else return false;
+            return (filasModificadas > 0 ? true : false);
+        } catch (Exception e) {
+            return false;
+        } finally {
+            db.close();
+        }
     }
 
     private boolean eliminar(int codContacto)
