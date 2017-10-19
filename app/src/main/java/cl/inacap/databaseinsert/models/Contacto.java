@@ -16,6 +16,12 @@ public class Contacto {
     private String nombre;
     private int fono;
     private String email;
+    public static final Contacto contactos[] = {
+        new Contacto(1, "Juanito Nieve", 1111, "jn@westeros.cl"), // Contacto.class.toString()
+        new Contacto(2, "Daniela Targaryen", 2222, "dt@westeros.cl"),
+        new Contacto(3, "Jorah Friendzone Mormont", 3333, "jm@westeros.cl"),
+        new Contacto(4, "Tyrion Lannister", 4444, "tl@westeros.cl")
+    };
 
     public Contacto() { }
 
@@ -142,5 +148,11 @@ public class Contacto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.nombre;
     }
 }
